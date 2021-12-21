@@ -12,8 +12,8 @@
         <tr>
             <td>ID</td>
             <td>Name</td>
-            <td>Last name</td>
-            <td>Age</td>
+            <td>Role</td>
+
             <td>Action</td>
         </tr>
         </thead>
@@ -22,18 +22,18 @@
             <tr>
                 <td th:text="${user.getId()}"></td>
                 <td th:text="${user.getName()}"></td>
-                <td th:text="${user.getPassword()}"></td>
+                <td th:text="${user.getRoles()}"></td>
 
                 <td>
-                    <a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit</a>
-                    <a th:href="@{/users/{id}/delete(id=${user.getId()})}">Delete</a>
+                    <a th:href="@{/admin/{id}/edit(id=${user.getId()})}">Edit</a>
+                    <a th:href="@{/admin/{id}/delete(id=${user.getId()})}">Delete</a>
                 </td>
             </tr>
         </th:block>
         </tbody>
     </table>
     <br/>
-    <a href="/users/add" class="add">Create new User!</a>
+    <a href="/admin/add" class="add">Create new User!</a>
 </div>
 </body>
 </html>

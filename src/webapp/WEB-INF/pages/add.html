@@ -6,10 +6,18 @@
     <title>Title</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/users}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin/add}" th:object="${user}">
     <label for="name">Enter name</label>
     <input type="text" th:field="*{name}" id="name"/>
     <br/>
+    <label for="password">Enter password</label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <br/>
+    <label for="confirmPassword">Enter confirm password</label>
+    <input type="text" th:field="*{confirmPassword}" id="confirmPassword">
+    <br/>
+    <input type="checkbox" name="checkBoxRoles" value="ROLE_USER"/>USER
+    <input type="checkbox" name="checkBoxRoles" value="ROLE_ADMIN"/>ADMIN
     <input type="submit" value="Save">
 </form>
 </body>

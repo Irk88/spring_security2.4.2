@@ -8,15 +8,18 @@
 <body>
 <p>Edit user</p>
 <br/>
-<form th:method="POST" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
   <label for="name">Enter name</label>
   <input type="text" th:field="*{name}" id="name"/>
   <br/>
-  <label for="lastName">Enter lastName</label>
-  <input type="text" th:field="*{lastName}" id="lastName"/>
+  <label for="password">New password</label>
+  <input type="text" th:field="*{password}" id="password">
   <br/>
-  <label for="age">Enter age</label>
-  <input type="text" th:field="*{age}" id="age">
+  <p>Select role</p>
+  <label for="admin">admin</label>
+  <input type="checkbox" th:id="admin" th:name="ROLE_ADMIN" th:value="ROLE_ADMIN" id="admin"/>
+  <label for="user">user</label>
+  <input type="checkbox" th:id="user" th:name="ROLE_USER" th:value="ROLE_USER" id="user"/>
   <br/>
   <input type="submit" value="Update">
 </form>
