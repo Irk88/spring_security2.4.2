@@ -3,20 +3,24 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create user</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/admin/add}" th:object="${user}">
-    <label for="name">Enter name</label>
-    <input type="text" th:field="*{name}" id="name"/>
-    <br/>
-    <label for="password">Enter password</label>
-    <input type="text" th:field="*{password}" id="password"/>
-    <br/>
-    <label for="confirmPassword">Enter confirm password</label>
-    <input type="text" th:field="*{confirmPassword}" id="confirmPassword">
-    <br/>
-    <input type="submit" value="Save">
+<form action="#" th:action="@{/add}" th:object="${user}" method="post">
+    <label for="username">Username</label>
+    <input type="text" th:field="*{name}" id="username" placeholder="Username">
+    </br>
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password" placeholder="Password">
+    </br>
+    <div th:each="role : ${roles}">
+        <input type="checkbox" name="nameRoles" th:value="${role.role}" th:text="${role.role}" th:checked="${role.role} == USER"/>
+    </div>
+    </br>
+    <input type="submit" value="Create User">
 </form>
 </body>
+<form th:method="GET" action="/logout">
+    <input type="submit" value="Exit">
+</form>
 </html>

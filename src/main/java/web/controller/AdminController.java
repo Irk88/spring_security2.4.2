@@ -5,87 +5,65 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
+import web.service.RoleService;
 import web.service.UserService;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/")
 public class AdminController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/")
-    public String getHomePage() {
-        return "index";
-    }
-
-    @GetMapping("/{id}")
-    public String showUserId(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        return "show";
+        this.roleService = roleService;
     }
 
     @GetMapping("/admin")
     public String allUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "admin";
     }
 
-    @GetMapping("/admin/add")
+    @GetMapping("/add")
     public String addUser(Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("user", new User());
         return "/add";
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/add")
     public String create(@ModelAttribute("user") User user,
-                         BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "/add";
-        }
-        if ((!user.getPassword().equals(user.getConfirmPassword()))) {
-            model.addAttribute("passwordError", "Пароли не совпадают");
-            return "/add";
-        }
-        userService.addUser(user);
-        return "redirect:/admin";
+                         @RequestParam("nameRoles") String[] nameRoles) {
+        user.setRoles(roleService.getSetOfRoles(nameRoles));
+        userService.updateUser(user);
+        return "redirect:/admin/";
     }
 
-    @GetMapping("/admin/{id}/edit")
+    @GetMapping("/edit/{id}")
     public String editUser(@PathVariable("id") long id, Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("user", userService.getUserById(id));
         return "edit";
     }
 
-    @PostMapping("/admin/{id}")
+    @PostMapping("/edit")
     public String updateUser(@ModelAttribute("user") User user,
-                             @RequestParam(required = false, name = "ROLE_ADMIN") String roleAdmin,
-                             @RequestParam(required = false, name = "ROLE_USER") String roleUser) {
-        Set<Role> roles = new HashSet<>();
-        if (roleAdmin != null) {
-            roles.add(new Role(1L, roleAdmin));
-        }
-        if (roleUser != null) {
-            roles.add(new Role(2L, roleUser));
-        }
-        user.setName(user.getName());
-        user.setRoles(roles);
+                             @RequestParam("nameRoles") String[] nameRoles) {
+        user.setRoles(roleService.getSetOfRoles(nameRoles));
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/{id}/delete")
+    @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userService.removeUserById(id);
         return "redirect:/admin";
